@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Folder Viewer</title>
+</head>
+<body>
+    <h1>GitHub 文件夹目录</h1>
+    <div id="folderList"></div>
+
+    <script>
+        const owner = "fengchenkeji";  // 替换为 GitHub 用户名
+        const repo = "pac";  // 替换为 GitHub 仓库名
+        const folderPath = "files";  // 替换为目标文件夹路径
+
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    const folderList = document.getElementById('folderList');
+                    data.forEach(item => {
+                        if (item.type === 'dir') {
+                            const folderItem = document.createElement('div');
+                            folderItem.textContent = item.name;
+                            folderList.appendChild(folderItem);
+                        }
+                    });
+                } else {
+                    alert("文件夹未找到或无法访问！");
+                }
+            })
+            .catch(error => {
+                console.error("获取文件夹内容失败:", error);
+                alert("无法加载文件夹内容！");
+            });
+    </script>
+</body>
+</html>
